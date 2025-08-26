@@ -11,7 +11,8 @@ const nav = [
   { href: "/play", label: "Play" },
   { href: "/archive", label: "Archive" },
   { href: "/leaderboard", label: "Leaderboard" },
-  { href: "/about", label: "About" }
+  { href: "/about", label: "About" },
+  { href: "/profile", label: "Profile" }
 ];
 
 export function Header() {

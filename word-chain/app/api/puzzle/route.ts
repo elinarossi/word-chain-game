@@ -32,8 +32,10 @@ const SAMPLE_PUZZLES: Record<string, Puzzle> = {
   }
 };
 
-export async function GET() {
-  const key = getTodayKey();
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const dateParam = url.searchParams.get("date");
+  const key = dateParam ?? getTodayKey();
   const fallback: Puzzle = {
     id: `puzzle-${key}`,
     date: key,

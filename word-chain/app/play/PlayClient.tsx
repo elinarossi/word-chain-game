@@ -30,7 +30,9 @@ export default function PlayClient() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/puzzle", { cache: "no-store" });
+        const url = new URL(window.location.href);
+        const date = url.searchParams.get("date");
+        const res = await fetch(`/api/puzzle${date ? `?date=${date}` : ""}` , { cache: "no-store" });
         const data = (await res.json()) as Puzzle;
         if (cancelled) return;
         setPuzzle(data);
