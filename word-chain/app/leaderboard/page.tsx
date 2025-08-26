@@ -17,7 +17,7 @@ export default function LeaderboardPage() {
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="h-6 w-40 bg-muted rounded animate-pulse" />
+              <div className="h-6 w-40 bg-muted rounded animate-pulse" aria-busy />
             ) : (
               <div className="text-sm text-muted-foreground">
                 Winners: {data?.today.winners.join(", ") || "—"}
@@ -32,7 +32,7 @@ export default function LeaderboardPage() {
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="space-y-2 animate-pulse">
+              <div className="space-y-2 animate-pulse" aria-busy>
                 <div className="h-6 bg-muted rounded" />
                 <div className="h-6 bg-muted rounded" />
                 <div className="h-6 bg-muted rounded" />

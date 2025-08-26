@@ -1,5 +1,5 @@
 import { Header } from "@/components/site/header";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
 import React from "react";
@@ -13,6 +13,13 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://example.com")
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1220" }
+  ]
+};
+
 export default function RootLayout({
   children
 }: {
@@ -24,7 +31,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="min-h-dvh flex flex-col">
             <Header />
-            <main className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 flex-1 py-8">
+            <main className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 flex-1 py-8" role="main">
               {children}
             </main>
           </div>

@@ -17,7 +17,7 @@ export default function ArchivePage() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="space-y-3 animate-pulse">
+            <div className="space-y-3 animate-pulse" aria-busy>
               <div className="h-8 rounded-md bg-muted" />
               <div className="h-8 rounded-md bg-muted" />
               <div className="h-8 rounded-md bg-muted" />

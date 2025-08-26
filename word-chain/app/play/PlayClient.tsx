@@ -169,6 +169,20 @@ export default function PlayClient() {
     return puzzle.missingIndices.every((i) => guesses[i] === puzzle.solution[i]);
   }, [puzzle, guesses]);
 
+  async function copyShare() {
+    if (!puzzle) return;
+    const header = `Word Chain ${puzzle.date}`;
+    const rows = puzzle.missingIndices.map((i) => (guesses[i] === puzzle.solution[i] ? "🟩" : "🟥"));
+    const body = rows.join("");
+    const text = `${header}\n${body}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setMessage("Result copied to clipboard");
+    } catch {
+      setMessage("Copy failed");
+    }
+  }
+
   return (
     <div className="grid gap-6">
       <Card>
@@ -244,7 +258,10 @@ export default function PlayClient() {
                     transition={{ duration: 0.2 }}
                     className="rounded-md border bg-muted p-3 text-center text-sm"
                   >
-                    Chain complete! 🎉
+                    <div className="flex items-center justify-center gap-3">
+                      <span>Chain complete! 🎉</span>
+                      <Button size="sm" variant="outline" onClick={copyShare} aria-label="Share result">Share</Button>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
