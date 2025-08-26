@@ -5,11 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const nav = [
   { href: "/play", label: "Play" },
-  { href: "/archive", label: "Archive" },
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/about", label: "About" },
   { href: "/profile", label: "Profile" }
@@ -18,6 +18,7 @@ const nav = [
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -40,6 +41,15 @@ export function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />
+          {session?.user ? (
+            <button className="hidden md:inline-flex rounded-md border px-3 py-1.5 text-sm" onClick={() => signOut()}>
+              Sign out
+            </button>
+          ) : (
+            <button className="hidden md:inline-flex rounded-md border px-3 py-1.5 text-sm" onClick={() => signIn()}>
+              Sign in
+            </button>
+          )}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <button
@@ -63,6 +73,12 @@ export function Header() {
                     {item.label}
                   </Link>
                 ))}
+                <button
+                  className="mt-2 inline-flex rounded-md border px-3 py-1.5 text-sm"
+                  onClick={() => (session?.user ? signOut() : signIn())}
+                >
+                  {session?.user ? "Sign out" : "Sign in"}
+                </button>
               </nav>
             </SheetContent>
           </Sheet>

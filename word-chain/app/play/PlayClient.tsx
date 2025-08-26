@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,12 +20,14 @@ type Puzzle = {
 type CellState = "idle" | "correct" | "incorrect" | "locked";
 
 export default function PlayClient() {
+  const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [guesses, setGuesses] = useState<string[]>([]);
   const [states, setStates] = useState<CellState[]>([]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [message, setMessage] = useState<string>("");
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -183,6 +186,18 @@ export default function PlayClient() {
     }
   }
 
+  async function submitFullChain() {
+    if (!puzzle) return;
+    const payload = puzzle.missingIndices.map((i) => ({ word: guesses[i], position: i, correct: guesses[i] === puzzle.solution[i] }));
+    const res = await fetch("/api/submit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ puzzleId: puzzle.id, guesses: payload }) });
+    const data = await res.json();
+    if (data.allCorrect) {
+      setMessage(session?.user ? "Streak updated!" : "Nice! (Login to track streaks)");
+    } else {
+      setMessage("Not quite — try again");
+    }
+  }
+
   return (
     <div className="grid gap-6">
       <Card>
@@ -203,6 +218,11 @@ export default function PlayClient() {
             </div>
           ) : puzzle ? (
             <div className="grid gap-3">
+              {!started && (
+                <div className="mb-2">
+                  <Button onClick={() => setStarted(true)} aria-label="Start game">Start Game</Button>
+                </div>
+              )}
               {Array.from({ length: puzzle.chainLength }).map((_, i) => {
                 const editable = isIndexEditable(i);
                 const state = states[i] ?? "idle";
@@ -220,7 +240,7 @@ export default function PlayClient() {
                       <div className="w-10 text-xs text-muted-foreground tabular-nums">{i + 1}</div>
                       <Input
                         value={value}
-                        disabled={!editable || state === "locked"}
+                        disabled={!started || !editable || state === "locked"}
                         onChange={(e) => handleChange(i, e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
@@ -240,14 +260,19 @@ export default function PlayClient() {
                         autoFocus={isActive}
                       />
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => handleHint(i, "first")} disabled={!editable}>First</Button>
-                        <Button variant="outline" size="sm" onClick={() => handleHint(i, "last")} disabled={!editable}>Last</Button>
-                        <Button variant="secondary" size="sm" onClick={() => handleHint(i, "skip")} disabled={!editable}>Skip</Button>
+                        <Button variant="outline" size="sm" onClick={() => handleHint(i, "first")} disabled={!started || !editable}>First</Button>
+                        <Button variant="outline" size="sm" onClick={() => handleHint(i, "last")} disabled={!started || !editable}>Last</Button>
+                        <Button variant="secondary" size="sm" onClick={() => handleHint(i, "skip")} disabled={!started || !editable}>Skip</Button>
                       </div>
                     </div>
                   </motion.div>
                 );
               })}
+
+              <div className="mt-2 flex gap-2">
+                <Button onClick={submitFullChain} disabled={!started} aria-label="Submit chain">Submit</Button>
+                <Button variant="outline" onClick={copyShare} disabled={!started} aria-label="Share result">Share</Button>
+              </div>
 
               <AnimatePresence>
                 {completed && (

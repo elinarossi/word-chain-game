@@ -1,6 +1,7 @@
 import { Header } from "@/components/site/header";
 import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "next-themes";
+import { Providers } from "@/components/providers";
 import { Inter } from "next/font/google";
 import React from "react";
 import "./globals.css";
@@ -28,14 +29,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <Providers>
           <div className="min-h-dvh flex flex-col">
             <Header />
             <main className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 flex-1 py-8" role="main">
               {children}
             </main>
           </div>
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

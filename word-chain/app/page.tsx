@@ -6,6 +6,9 @@ export default function HomePage() {
         <p className="mt-3 text-muted-foreground">
           Production-ready scaffold with Next.js 14, Tailwind, shadcn/ui, and Framer Motion
         </p>
+        <div className="mt-6">
+          <a href="/play" className="inline-flex rounded-md border px-4 py-2 text-sm">Start Game</a>
+        </div>
       </div>
     </section>
   );
