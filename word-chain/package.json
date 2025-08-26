@@ -1,0 +1,46 @@
+{
+  "name": "word-chain",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-ready Next.js 14 scaffold with TailwindCSS, shadcn/ui, Framer Motion",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.12",
+    "lucide-react": "^0.542.0",
+    "next": "^14.2.32",
+    "next-themes": "^0.4.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.12",
+    "@types/node": "^20.14.2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.13",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-unused-imports": "^3.2.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "shadcn": "^2.10.0",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.5.4"
+  }
+}

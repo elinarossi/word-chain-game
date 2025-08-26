@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/eslintrc",
+  "root": true,
+  "extends": ["next/core-web-vitals", "eslint:recommended", "prettier"],
+  "plugins": ["import", "unused-imports"],
+  "rules": {
+    "unused-imports/no-unused-imports": "error",
+    "import/order": [
+      "warn",
+      {
+        "groups": [["builtin", "external", "internal"], ["parent", "sibling", "index"]],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ]
+  },
+  "settings": {
+    "next": {
+      "rootDir": ["app", "pages", "src"]
+    }
+  }
+}
