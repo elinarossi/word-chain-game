@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const nav = [
   { href: "/play", label: "Play" },
@@ -38,33 +39,35 @@ export function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <button
-            className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border"
-            aria-label="Toggle menu"
-            onClick={() => setOpen((v) => !v)}
-          >
-            <Menu size={18} />
-          </button>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <button
+                className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border"
+                aria-label="Open menu"
+              >
+                <Menu size={18} />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <nav className="flex flex-col gap-2">
+                {nav.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`block rounded-md px-2 py-2 transition-colors hover:bg-muted ${
+                      pathname === item.href ? "text-foreground" : "text-foreground/70"
+                    }`}
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-      {open && (
-        <div className="md:hidden border-t">
-          <div className="container mx-auto max-w-5xl py-2">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`block py-2 transition-colors hover:text-foreground/80 ${
-                  pathname === item.href ? "text-foreground" : "text-foreground/60"
-                }`}
-                onClick={() => setOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* mobile nav handled by Sheet */}
     </header>
   );
 }
